@@ -1,4 +1,4 @@
- import 'dart:convert';
+import 'dart:convert';
 
 import 'package:digital_coin/models/app_config_model.dart';
 import 'package:digital_coin/pages/home_page.dart';
@@ -25,8 +25,8 @@ Future<void> loadConfig() async {
 }
 
 void registerHTTPService() {
-  GetIt.instance.registerSingleton<HTTPService>(
-    HTTPService(),
+  GetIt.instance.registerSingleton<ApiService>(
+    ApiService(),
   );
 }
 
@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bitcoin App',
       theme: ThemeData(
-          scaffoldBackgroundColor: const Color.fromARGB(255, 149, 202, 212)),
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 149, 202, 212),
+      ),
       home: const HomePage(),
     );
   }

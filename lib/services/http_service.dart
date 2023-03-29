@@ -1,25 +1,32 @@
 import 'package:dio/dio.dart';
-import '../models/app_config_model.dart';
 import 'package:get_it/get_it.dart';
 
-class HTTPService {
+import '../models/app_config_model.dart';
+
+typedef CoinResponse = Map<String, dynamic>;
+
+class ApiService {
   final Dio dio = Dio();
 
   AppConfig? appConfig;
-  String? base_url;
+  String? baseUrl;
 
-  HTTPService() {
+  ApiService() {
     appConfig = GetIt.instance.get<AppConfig>();
-    base_url = appConfig!.coinApiBaseUrl;
+    baseUrl = appConfig!.coinApiBaseUrl;
   }
-  Future<Response?> get(String path) async {
+
+  Future<Response> _apiGet(String path) async {
     try {
-      String url = "$base_url$path";
-      Response response = await dio.get(url);
-      return response;
-    } catch (e) {
-      print('HTTPService: Unable to perform get request.');
-      print(e);
+      return await dio.get("$baseUrl$path");
+    } catch (error, stackTrace) {
+      print('$error\n$stackTrace');
+      throw 'HTTPService: Unable to perform get request.';
     }
+  }
+
+  Future<CoinResponse> getCoin(String coin) async {
+    final response = await _apiGet("coins/$coin");
+    return (response.data as Map).cast();
   }
 }
